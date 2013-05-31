@@ -19,8 +19,8 @@ Ext.define('CustomApp', {
 			modelType: 'release',
 			fieldLable: 'Select a release',
 			listeners: {
-				blur: function(picker) {
-				}
+				blur: this._createGrid,
+				scope: this
 			},
 			storeConfig: {
 				filters: [
@@ -33,7 +33,10 @@ Ext.define('CustomApp', {
 				context: dataContext
 			}	
 		});
-		
-		
-    }
+    },
+	
+	_createGrid:  function(picker) {
+		this.add({
+		});
+	}
 });
