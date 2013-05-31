@@ -3,6 +3,11 @@ Ext.define('CustomApp', {
     componentCls: 'app',
 
     launch: function() {
-        console.log("hello world!");
+        this.add({
+			xtype: 'component',
+			cls: 'title',
+			html: 'Multi Release Ranking',
+			padding: '0, 0, 10, 0'
+        });
     }
 });
