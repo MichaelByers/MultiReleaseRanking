@@ -19,8 +19,8 @@ Ext.define('CustomApp', {
 			modelType: 'release',
 			fieldLable: 'Select a release',
 			listeners: {
-				blur: function(picker) {
-				}
+				blur: this._createGrid,
+				scope: this
 			},
 			storeConfig: {
 				filters: [
@@ -33,7 +33,6 @@ Ext.define('CustomApp', {
 				context: dataContext
 			}	
 		});
-		
 
 		filter = new Rally.data.QueryFilter({
 			property: 'StartDate',
@@ -68,5 +67,11 @@ Ext.define('CustomApp', {
             }
         });
 
-    }
+    },
+	
+	_createGrid:  function(picker) {
+		this.add({
+		});
+	}
+
 });
