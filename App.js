@@ -34,6 +34,39 @@ Ext.define('CustomApp', {
 			}	
 		});
 		
-		
+
+		filter = new Rally.data.QueryFilter({
+			property: 'StartDate',
+			operator: '>=',
+			value: this.qDate
+		});
+		var newFilter = new Rally.data.QueryFilter({
+			property: 'EndDate',
+			operator: '<=',
+			value: Rally.util.DateTime.toIsoString(Rally.util.DateTime.add(new Date(), 'day', 21))
+		});
+		filter = filter.and(newFilter);
+
+    	var myContext = this.context.getDataContext();
+    	myContext.projectScopeDown = false;
+
+   		Ext.create('Rally.data.WsapiDataStore', {
+            model: 'Iteration',
+            context: myContext,
+            autoLoad: true,
+    		filters: filter,
+        	fetch: 'Name,StartDate,EndDate',
+		    sorters: [
+		              {
+		                  property: 'StartDate',
+		                  direction: 'ASC'
+		              }
+		    ],
+            listeners: {
+                load: this._onIterationsLoaded,
+                scope: this
+            }
+        });
+
     }
 });
