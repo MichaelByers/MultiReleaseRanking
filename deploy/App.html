@@ -7,7 +7,7 @@
 
     <script type="text/javascript">
         Rally.onReady(function () {
-                Ext.define("CustomApp",{extend:"Rally.app.App",componentCls:"app",launch:function(){}});
+                Ext.define("CustomApp",{extend:"Rally.app.App",componentCls:"app",margin:15,cls:"release-ranking",launch:function(){var dataContext=this.context.getDataContext();dataContext.projectScopeDown=!1,this.add({xtype:"component",cls:"title",html:"Multi Release Ranking",padding:"0, 0, 10, 0"},{xtype:"rallymultiobjectpicker",modelType:"release",fieldLable:"Select a release",listeners:{blur:this._runQuery,scope:this},storeConfig:{filters:[{property:"State",operator:"!=",value:"Accepted"}],context:dataContext}})},_runQuery:function(picker){var myContext=this.context.getDataContext();myContext.projectScopeDown=!0,Ext.create("Rally.data.WsapiDataStore",{model:"UserStory",context:myContext,autoLoad:!0,filters:{property:"Release.Name",operator:"=",value:picker.data.Name},fetch:"Name,FormattedID,ScheduleState,PlanEstimate,KanbanState,Iteration,Release",sorters:[{property:"StartDate",direction:"ASC"}],listeners:{load:this._onStoriesLoaded,scope:this}})},_createGrid:function(picker){this.add({})}});
 
             Rally.launchApp('CustomApp', {
                 name:"MultiReleaseRanking",
@@ -19,8 +19,8 @@
 
 
     <style type="text/css">
-        .app {
-     /* Add app styles here */
+        .app .title {
+	font-size: 18px;
 }
 
     </style>
