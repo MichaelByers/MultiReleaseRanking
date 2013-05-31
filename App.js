@@ -131,9 +131,19 @@ Ext.define('CustomApp', {
 		}
 		// sort
 		this._sortByKey(d, 'Rank');
-		for(var i=0; i<d.length; i++) {
-			console.log(d[i].FormattedID+ " " + d[i].Rank);
-		}
+		
+		Rally.data.ModelFactory.getModel({
+			type: 'UserStory',
+			success: function(userStoryModel) {
+				var dataStore =  Ext.create('Rally.data.WsapiDataStore', {
+		        	data: d,
+					model: userStoryModel,
+					autoLoad: true
+		    	});
+				this._createGrid(dataStore);
+			},
+			scope: this
+		});
 	},
 
 	_sortByKey: function (array, key) {
@@ -143,9 +153,17 @@ Ext.define('CustomApp', {
 	    });
 	},
 	
-	_createGrid:  function(picker) {
+	_createGrid:  function(dataStore) {
 		this.add({
-		});
+			xtype: 'rallygrid',
+			store: dataStore,
+			columnCfgs: [
+				{xtype: 'rownumberer'},
+				{text: 'Manual Rank Above', xtype:'numbercolumn', width: 60},
+				{text: 'Name', dataIndex: 'Name'}
+			],
+			enableRanking: true
+		});	
 	}
 
 });
