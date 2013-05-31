@@ -163,6 +163,8 @@ Ext.define('CustomApp', {
 		this.add({
 			xtype: 'rallygrid',
 			store: dataStore,
+			disableColumnMenus: false,
+			autoAddAllModelFieldsAsColumns: true,
 			id: 'grid',
 			columnCfgs: [
 				{xtype: 'rownumberer'},

@@ -5,7 +5,8 @@
     "sdk": "2.0rc1",
     "javascript": [
         "App.js",
-		"ManualRankPlugin.js"
+		"ManualRankPlugin.js",
+		"Overrides.js"
     ],
     "css": [
         "app.css"
