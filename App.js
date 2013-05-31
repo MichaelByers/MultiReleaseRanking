@@ -124,6 +124,7 @@ Ext.define('CustomApp', {
 	_onDefectsLoaded: function(store, dData, sData) {
 		// combine stories and defect data
 		var myData = sData.concat(dData);
+		
 		// extract data
 		var d = new Array();
 		for(var i=0; i<myData.length; i++) {
@@ -135,10 +136,14 @@ Ext.define('CustomApp', {
 		Rally.data.ModelFactory.getModel({
 			type: 'UserStory',
 			success: function(userStoryModel) {
-				var dataStore =  Ext.create('Rally.data.WsapiDataStore', {
-		        	data: d,
-					model: userStoryModel,
-					autoLoad: true
+				var dataStore =  Ext.create('Rally.data.custom.Store', {
+		        	model: userStoryModel,
+					data: d,
+					sorters: [
+						{
+							property: 'Rank'
+						}
+					]
 		    	});
 				this._createGrid(dataStore);
 			},
@@ -154,9 +159,11 @@ Ext.define('CustomApp', {
 	},
 	
 	_createGrid:  function(dataStore) {
+		this.remove('grid');
 		this.add({
 			xtype: 'rallygrid',
 			store: dataStore,
+			id: 'grid',
 			columnCfgs: [
 				{xtype: 'rownumberer'},
 				{text: 'Manual Rank Above', xtype:'numbercolumn', width: 60},
