@@ -3,11 +3,13 @@ Ext.define('CustomApp', {
     componentCls: 'app',
     margin: 15,
     cls: 'release-ranking',
-
+	hide: true,
+	filter: undefined,
+	
     launch: function () {
         var dataContext = this.context.getDataContext();
         dataContext.projectScopeDown = false;
-
+		
         this.add({
                 xtype: 'component',
                 cls: 'title',
@@ -17,7 +19,8 @@ Ext.define('CustomApp', {
             {
                 xtype: 'rallymultiobjectpicker',
                 modelType: 'release',
-                fieldLable: 'Select a release',
+				itemId: 'rankingreleasepicker',
+                fieldLabel: 'Select releases: ',
                 listeners: {
                     blur: this._runQuery,
                     scope: this
@@ -32,13 +35,29 @@ Ext.define('CustomApp', {
                     ],
                     context: dataContext
                 }
-            });
-
+            },
+			{
+				xtype: 'checkbox',
+				mode: 'single',
+				fieldLabel: 'Hide Accepted',
+				allowDeselect: true,
+				id: 'hideCheckbox',
+				scope: this,
+				checked: this.hide,
+				handler: this._onHideChange
+			}
+		);
     },
 
-    _runQuery: function (picker) {
+	_onHideChange: function() {
+		this.hide = Ext.getCmp('hideCheckbox').getValue();
+		this._makeFilter();
+		this._createStoryStore();
+	},
+	
+	_makeFilter: function() {
         var filter = null;
-        var pRelease = picker.getValue();
+        var pRelease = this.down('#rankingreleasepicker').getValue();
 
         if ((pRelease !== null) && (pRelease.length > 0)) {
             for (var i = 0; i < pRelease.length; i++) {
@@ -56,8 +75,22 @@ Ext.define('CustomApp', {
                 }
             }
             this.filter = filter;
-			this._createStoreForGrid();
-        }
+
+			if(this.hide == true) {
+	            var newFilter = new Rally.data.QueryFilter({
+	                property: 'ScheduleState',
+	                operator: '!=',
+	                value: 'Accepted'
+	            });
+	            this.filter = this.filter.and(newFilter);			
+			}
+		}
+		
+	},
+	
+    _runQuery: function () {
+		this._makeFilter();
+		this._createStoreForGrid();
     },
 
     _createStoryStore: function () {
