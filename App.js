@@ -147,6 +147,7 @@ Ext.define('CustomApp', {
 		var grid = this.down('rallygrid');
 		if (grid) {
 			grid.getStore().loadData(d);
+			grid.show();
 		}
     },
 
@@ -242,7 +243,9 @@ Ext.define('CustomApp', {
 				}
 			}
         });   
-		this.down('rallygrid').getStore().load();
+		var grid = this.down('rallygrid');
+		grid.hide();
+		grid.getStore().load();
 	},
 	
 	_manualRankIfManualRankColumn: function(editor, e) {
