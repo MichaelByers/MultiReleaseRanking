@@ -176,7 +176,22 @@ Ext.define('CustomApp', {
             autoAddAllModelFieldsAsColumns: true,
             columnCfgs: [	
                 {xtype: 'rownumberer'},
-                {text: 'Manual Rank Above', xtype: 'numbercolumn', width: 60},
+                {
+					text: 'Manual Rank Above', 
+					xtype: 'numbercolumn', 
+					width: 60, 
+					editor: {
+                		xtype: 'numberfield', 
+						minValue: 1, 
+						listeners: {
+							blur: function(field) {
+								var relativeRecord = this.down('rallygrid').getStore().getAt(field.getValue()-1);  //index of 0
+								debugger;
+							},
+							scope: this
+						} 
+					}
+                },
                 'FormattedID',
                	'Name',
 				'c_KanbanState',
