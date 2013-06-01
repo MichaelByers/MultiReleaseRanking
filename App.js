@@ -147,7 +147,7 @@ Ext.define('CustomApp', {
 		var grid = this.down('rallygrid');
 		if (grid) {
 			grid.getStore().loadData(d);
-			grid.show();
+			grid.setLoading(false);
 		}
     },
 
@@ -244,7 +244,7 @@ Ext.define('CustomApp', {
 			}
         });   
 		var grid = this.down('rallygrid');
-		grid.hide();
+		grid.setLoading(true);
 		grid.getStore().load();
 	},
 	
