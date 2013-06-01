@@ -62,7 +62,7 @@ Ext.define('CustomApp', {
                 context: myContext,
                 autoLoad: true,
         		filters: filter,
-            	fetch: 'Name,FormattedID,ScheduleState,PlanEstimate,KanbanState,Iteration,Release,Project,Ready,Rank,Blocked',
+            	fetch: 'Name,FormattedID,ScheduleState,PlanEstimate,c_KanbanState,Iteration,Release,Project,Ready,Rank,Blocked',
     		    sorters: [
     		              {
     		                  property: 'Rank'
@@ -169,7 +169,10 @@ Ext.define('CustomApp', {
 			columnCfgs: [
 				{xtype: 'rownumberer'},
 				{text: 'Manual Rank Above', xtype:'numbercolumn', width: 60},
-				{text: 'Name', dataIndex: 'Name'}
+				{text: 'ID', dataIndex: 'FormattedID', width: 60},
+				{text: 'Name', dataIndex: 'Name', width: 500},
+				{text: 'Kanban', dataIndex: 'c_KanbanState', width: 100},
+				{text: 'Release', dataIndex: 'Release.Name', width: 150}
 			],
 			enableRanking: true
 		});	
