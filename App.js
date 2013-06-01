@@ -88,7 +88,7 @@ Ext.define('CustomApp', {
 		
 	},
 	
-    _runQuery: function () {
+    _runQuery: function (store, data) {
 		this._makeFilter();
 		this._createStoreForGrid();
     },
@@ -204,7 +204,7 @@ Ext.define('CustomApp', {
     _createGrid: function (dataStore) {
 		//TODO: cleanup, move to its own class
         this._overrideProxyWriter(dataStore);
-
+		
 		var grid = this.down('rallygrid');
 		if (grid) {
 			grid.destroy();
@@ -236,7 +236,14 @@ Ext.define('CustomApp', {
                 'FormattedID',
                	'Name',
 				'c_KanbanState',
-                'Release',
+                {
+					text: 'Release', 
+					xtype:'templatecolumn',
+					tpl: '{Release._refObjectName}',
+					editor: {
+						xtype: 'rallyreleasecombobox'
+					}
+				},
 				'Ready'
             ],
             enableRanking: true,
