@@ -169,7 +169,7 @@ Ext.define('CustomApp', {
                     filters: [
 					{
 						property: 'Name',
-						value: 'Does Not Exist Please Work'
+						value: 'DoesNotExist'
 					}
 					],
                     sorters: [
@@ -178,6 +178,12 @@ Ext.define('CustomApp', {
                         }
                     ],
 					listeners: {
+						beforeload: function(store) {
+							if (store.filters.items[0].value ===  'DoesNotExist') {
+								this._createStoryStore();
+								return false;
+							}
+						},
 						update: function(store, record, operation, modifiedFieldNames) {
 							if (operation === this.previousState) {
 								this._createStoryStore();
@@ -188,7 +194,7 @@ Ext.define('CustomApp', {
 						scope: this
 					}
 				});
-				dataStore.on('load', this._createStoryStore, this, {single: true});
+				// dataStore.on('load', this._createStoryStore, this, {single: true});
 				this._createGrid(dataStore);
             },
             scope: this
