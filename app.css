@@ -3,15 +3,19 @@
 }
 
 .green-back {
-	background-color: #3cb371 !important;
+	color: #3cb371 !important;
 }
 
 .red-back {
-    background-color: #ffe2e2 !important;
+    color: red !important;
 }
 
 .yellow-back {
-    background: #fdffc9 !important;
+	color: yellow;
+}
+
+.gray-back {
+	color: gray;
 }
 
 .error-row .x-grid-cell {

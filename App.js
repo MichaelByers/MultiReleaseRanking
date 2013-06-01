@@ -194,7 +194,6 @@ Ext.define('CustomApp', {
 						scope: this
 					}
 				});
-				// dataStore.on('load', this._createStoryStore, this, {single: true});
 				this._createGrid(dataStore);
             },
             scope: this
@@ -202,6 +201,7 @@ Ext.define('CustomApp', {
 	},
 
     _createGrid: function (dataStore) {
+		
 		//TODO: cleanup, move to its own class
         this._overrideProxyWriter(dataStore);
 		
@@ -218,6 +218,13 @@ Ext.define('CustomApp', {
 			editingConfig: {
 				listeners: {
 					edit: this._manualRankIfManualRankColumn,
+					beforeedit: function(editor, e) {
+						// if (e.column.getEditor().xtype === "rallycombobox") {
+							//e.column.getEditor().getStore().remoteFilter = false;
+							//e.column.getEditor().getStore().filter('_ref', e.record.get('Project')._ref);
+							//e.column.getEditor().getStore().remoteFilter = true;
+						// }
+					},
 					scope: this
 				}
 			},
@@ -241,27 +248,43 @@ Ext.define('CustomApp', {
 					xtype:'templatecolumn',
 					tpl: '{Release._refObjectName}',
 					editor: {
-						xtype: 'rallyreleasecombobox'
+						xtype: 'rallycombobox',
+						itemId: 'releasebox', 
+						storeConfig: {
+						    model: 'Release',
+							autoLoad: true
+						}
 					}
-				},
-				'Ready'
-            ],
-            enableRanking: true,
-			viewConfig: {
-				stripeRows: true,
-				//Return CSS class to apply to rows depending upon data values
-				getRowClass: function(record, index) {
-					var c = record.get('Ready');
-				    return "yellow-back";
 				}
-			}
+            ],
+			viewConfig: {
+				stripeRows: false
+			},
+            enableRanking: true
         });   
+		
 		var grid = this.down('rallygrid');
+		grid.getView().getRowClass = function(record, index, param, store) {
+			if (record.get('Ready')) {
+				return "green-back";
+			}
+			if (record.get('Blocked')) {
+				return "red-back";
+			}
+			if (index >= 5) {
+				return "gray-back";
+			}
+		};
 		grid.setLoading(true);
 		grid.getStore().load();
 	},
 	
 	_manualRankIfManualRankColumn: function(editor, e) {
+		//TODO: fix this hack when editing the Release combobox
+	    if (e.column.getEditor().getItemId() === "releasebox") {
+ 			e.record.set('Release', e.value);
+ 		}
+		
 		if (e.column.getItemId() === 'manualRank' && e.value !== null) {
 			var recordToRank = e.record;
 			var store = this.down('rallygrid').getStore();
