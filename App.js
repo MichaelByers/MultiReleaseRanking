@@ -159,23 +159,85 @@ Ext.define('CustomApp', {
 	},
 	
 	_createGrid:  function(dataStore) {
-		this.remove('grid');
+	    var cellEditing = Ext.create('Ext.grid.plugin.CellEditing', {
+	        clicksToEdit: 1
+	    });
+
+//	    var comboParameter = Ext.create('ComboBoxParameter');
+	    
 		this.add({
 			xtype: 'rallygrid',
 			store: dataStore,
 			disableColumnMenus: false,
 			autoAddAllModelFieldsAsColumns: true,
 			id: 'grid',
+/*		    columns: [
+		              {xtype: 'rownumberer'},
+		              {
+		                  header: 'Manual Rank Above',
+		                  xtype: 'numbercolumn',
+		                  width: 60,
+		                  sortable: false,
+		                  editor: {
+		                      xtype: 'numberfield',
+		                      allowBlank: true
+		                  }
+		              },{
+		                  header: 'ID',
+		                  dataIndex: 'FormattedID',
+		                  width: 60,
+		                  sortable: false
+		              },{
+		                  header: 'Kanban',
+		                  dataIndex: 'c_KanbanState',
+		                  width: 100,
+		                  sortable: true,
+		                  editor: {
+		                      xtype: 'textfield',
+		                      allowBlank: true
+		                  }
+		              }
+		    ],
+*/
 			columnCfgs: [
 				{xtype: 'rownumberer'},
-				{text: 'Manual Rank Above', xtype:'numbercolumn', width: 60},
+				{text: 'Manual Rank Above', xtype:'numbercolumn', width: 60, editor: {
+                    	xtype: 'numberfield',
+                    	allowBlank: true }
+                },
 				{text: 'ID', dataIndex: 'FormattedID', width: 60},
 				{text: 'Name', dataIndex: 'Name', width: 500},
-				{text: 'Kanban', dataIndex: 'c_KanbanState', width: 100},
-				{text: 'Release', dataIndex: 'Release.Name', width: 150}
+				{text: 'Kanban', dataIndex: 'c_KanbanState', width: 100, editor: {
+	                xtype: 'combobox',
+	                typeAhead: true,
+	                triggerAction: 'all',
+	                selectOnTab: true,
+	                store: [
+	                    ['Prioritized','Prioritized'],
+	                    ['Analysis','Analysis'],
+	                    ['Development','Development'],
+	                    ['Peer Review','Peer Review'],
+	                    ['QA','QA'],
+	                    ['Completed', 'Completed'],
+	                    ['Accepted', 'Accepted']
+	                ],
+	                lazyRender: true,
+	                listClass: 'x-combo-list-small'
+	            } },
+				{text: 'Release', dataIndex: 'Release', width: 150},
+				{text: 'Ready', dataIndex: 'Ready', width: 50}
 			],
-			enableRanking: true
-		});	
+			enableRanking: true,
+			plugins: [cellEditing],
+			viewConfig: {
+				stripeRows: true,
+		        //Return CSS class to apply to rows depending upon data values
+		        getRowClass: function(record, index) {
+		            var c = record.get('Ready');
+	            	return "yellow-back";
+		        }
+		    }
+		});
 	}
 
 });

@@ -2,6 +2,19 @@
 	font-size: 18px;
 }
 
-/*.over-capacity {
-	background-color: gray;
-}*/
+.green-back {
+	background-color: #3cb371 !important;
+}
+
+.red-back {
+    background-color: #ffe2e2 !important;
+}
+
+.yellow-back {
+    background: #fdffc9 !important;
+}
+
+.error-row .x-grid-cell {
+    background-color: #FFF000 !important;font-weight: bold; border: 0;
+}
+
