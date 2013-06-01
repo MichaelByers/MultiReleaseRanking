@@ -174,22 +174,23 @@ Ext.define('CustomApp', {
             store: dataStore,
             disableColumnMenus: false,
             autoAddAllModelFieldsAsColumns: true,
+			sortableColumns: false,
+			editingConfig: {
+				listeners: {
+					edit: this._manualRankIfManualRankColumn,
+					scope: this
+				}
+			},
             columnCfgs: [	
                 {xtype: 'rownumberer'},
                 {
 					text: 'Manual Rank Above', 
-					xtype: 'numbercolumn', 
+					xtype: 'numbercolumn',
+					itemId: 'manualRank', 
 					width: 60, 
 					editor: {
                 		xtype: 'numberfield', 
-						minValue: 1, 
-						listeners: {
-							blur: function(field) {
-								var relativeRecord = this.down('rallygrid').getStore().getAt(field.getValue()-1);  //index of 0
-								debugger;
-							},
-							scope: this
-						} 
+						minValue: 1
 					}
                 },
                 'FormattedID',
@@ -209,6 +210,28 @@ Ext.define('CustomApp', {
 			}
         });   
 		this.down('rallygrid').getStore().load();
+	},
+	
+	_manualRankIfManualRankColumn: function(editor, e) {
+		if (e.column.getItemId() === 'manualRank' && e.value !== null) {
+			var recordToRank = e.record;
+			var store = this.down('rallygrid').getStore();
+			//index of 0
+			var relativeRecordIdx =  e.value - 1;
+			var pos = 'before';
+			if (e.value >= store.getCount()) {
+				relativeRecordIdx = store.getCount() - 1;
+				pos = 'after';
+			}
+			
+			var relativeRecord = this.down('rallygrid').getStore().getAt(relativeRecordIdx);
+			
+			Rally.data.Ranker.rankRelative({
+				recordToRank: recordToRank,
+				relativeRecord: relativeRecord,
+				position: pos
+			});
+		}	
 	},
 
     _overrideProxyWriter: function(dataStore) {
