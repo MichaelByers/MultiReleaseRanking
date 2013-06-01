@@ -3,7 +3,7 @@ Ext.define('CustomApp', {
     componentCls: 'app',
     margin: 15,
     cls: 'release-ranking',
-	hide: true,
+	hideCheckbox: true,
 	filter: undefined,
 	
     launch: function () {
@@ -43,14 +43,14 @@ Ext.define('CustomApp', {
 				allowDeselect: true,
 				id: 'hideCheckbox',
 				scope: this,
-				checked: this.hide,
+				checked: this.hideCheckbox,
 				handler: this._onHideChange
 			}
 		);
     },
 
 	_onHideChange: function() {
-		this.hide = Ext.getCmp('hideCheckbox').getValue();
+		this.hideCheckbox = Ext.getCmp('hideCheckbox').getValue();
 		this._makeFilter();
 		this._createStoryStore();
 	},
@@ -76,7 +76,7 @@ Ext.define('CustomApp', {
             }
             this.filter = filter;
 
-			if(this.hide == true) {
+			if(this.hideCheckbox == true) {
 	            var newFilter = new Rally.data.QueryFilter({
 	                property: 'ScheduleState',
 	                operator: '!=',
